@@ -214,7 +214,7 @@ public class StudentController {
 								toRegisterIndex.add(i);
 								StudentManager.updateStudentDB(studentList);
 								CourseManager.slotTaken(i.getIndexNum(), i.getCourseCode());
-								MailManager.sendFromGMail("from_email","password","to_email","Congratulations!",
+								MailManager.sendFromGMail("ntuchinesetiger@gmail.com","@Testing123",s4.getUsername()+"@e.ntu.edu.sg","Congratulations!",
 									"Off waitlist. Now registered for " + i.getCourseCode());
 								break;
 							}
