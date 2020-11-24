@@ -1,5 +1,8 @@
 import java.io.*;
 import java.util.ArrayList;
+/**
+ * Controller class to handle all Staff related logic functions.
+ */
 
 public class StaffManager {
 

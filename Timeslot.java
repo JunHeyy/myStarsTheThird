@@ -1,6 +1,9 @@
 import java.time.*;
 import java.io.Serializable;
 
+/**
+ * Concrete entity class representing the time slot available
+ */
 public class Timeslot implements Serializable{
 
     private int day;

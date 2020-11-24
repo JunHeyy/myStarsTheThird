@@ -2,6 +2,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.time.LocalTime;
 
+/**
+ * Class to populate data.
+ */
 public class PopulateCourseNindex {
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
 

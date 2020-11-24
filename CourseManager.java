@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * Control class that handles all functions involving reading and writing to the Course database.
  */
-public class CourseManager implements StarsManager{
+public class CourseManager {
 	
     private static ArrayList<Course> courseList;
     private static final String filename = "data/Course.dat";

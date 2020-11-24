@@ -1,5 +1,7 @@
 import java.io.Serializable;
-
+/**
+ * Concrete entity represent the user parent class.
+ */
 public class User implements Serializable {
 
     private String username;
