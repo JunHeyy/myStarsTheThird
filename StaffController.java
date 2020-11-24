@@ -189,7 +189,7 @@ public class StaffController{
 				}
 			}
 			System.out.println("+--------------------------------------------------------------------------+");
-	        if(!found) System.out.println("Opps, Index cannot be found");
+	        if(!found) System.out.println("Opps! No students are registered to this course!");
 		}
 		catch(Exception e) {
 			System.out.println("File not found");			
@@ -219,7 +219,7 @@ public class StaffController{
 	        	}	        	
 			}
 			System.out.println("+--------------------------------------------------------------------------+");
-	        if(!found) System.out.println("Opps, Coursecode could not be found!!");
+	        if(!found) System.out.println("Opps, No students are registered to this course!");
 		}
 		catch(Exception e) {
 			System.out.println("File not found");
