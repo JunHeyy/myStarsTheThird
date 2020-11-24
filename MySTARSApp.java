@@ -21,7 +21,7 @@ public class MySTARSApp {
 
 
         
-        int choice;
+        int choice=0;
         Scanner sc = new Scanner(System.in);
         Console con = System.console();
 
@@ -39,10 +39,20 @@ public class MySTARSApp {
 
         while (!loginSuccess) {
             do {
-                System.out.println("Select your account type:");
-                System.out.println("1. Student");
-                System.out.println("2. Staff");
-                choice = Integer.parseInt(sc.nextLine());    
+
+
+                while (choice !=1 && choice!=2){
+                    try {
+                        System.out.println("Select your account type:");
+                        System.out.println("1. Student");
+                        System.out.println("2. Staff");
+                        choice = Integer.parseInt(sc.nextLine());
+
+                    }catch(Exception NumberFormatException) {
+                        System.out.println("Please enter choice again (1-2) and only integers");
+                    }
+
+                }
                 switch (choice) {
                     case 1:
                         accountType = "Student";

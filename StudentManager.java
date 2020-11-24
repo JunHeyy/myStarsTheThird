@@ -52,7 +52,7 @@ public class StudentManager {
 	        	studentList.add(student);
 	        	System.out.println("The following students are registered:");
 				for(Student s : studentList){
-					System.out.println("Student name: "  +s.getName() +"is registered in the database");
+					System.out.println("Student name: "  +s.getName() +" is registered in the database");
 
 				}
 	        	System.out.println("Succesfully added student into the database");

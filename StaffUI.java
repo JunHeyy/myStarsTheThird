@@ -31,7 +31,8 @@ class StaffUI{
             System.out.println("(7) Print student list by index number ");
             System.out.println("(8) Print student list by course ");
 			System.out.println("(9) Print all courses");
-            System.out.println("(10) Log off");
+			System.out.println("(10) Print course vacancies by index");
+            System.out.println("(11) Log off");
 
             System.out.print("Select an option: ");
 
@@ -55,18 +56,22 @@ class StaffUI{
 							System.out.print("Enter the student's matriculation number again: ");
 							matricNum = sc.nextLine();
 						}
-						System.out.print("Enter the access start date in yyyy-MM-dd format (e.g. 2020-01-30): ");
-						startDate = sc.nextLine();
-						System.out.print("Enter the access start time in 24hr HH:mm format (e.g. 13:30): ");
-						startTime = sc.nextLine();
-						System.out.print("Enter the access end date in yyyy-MM-dd format (e.g. 2020-01-30): ");
-						endDate = sc.nextLine();
-						System.out.print("Enter the access end time in 24hr HH:mm format (e.g. 13:30): ");
-						endTime = sc.nextLine();
-						sDate = LocalDate.parse(startDate, dateFormatter);
-						sTime = LocalTime.parse(startTime, timeFormatter);
-						eDate = LocalDate.parse(endDate, dateFormatter);
-						eTime = LocalTime.parse(endTime, timeFormatter);
+						do {
+							System.out.print("Enter the access start date in yyyy-MM-dd format (e.g. 2020-01-30): ");
+							startDate = sc.nextLine();
+							System.out.print("Enter the access start time in 24hr HH:mm format (e.g. 13:30): ");
+							startTime = sc.nextLine();
+							System.out.print("Enter the access end date in yyyy-MM-dd format (e.g. 2020-01-30): ");
+							endDate = sc.nextLine();
+							System.out.print("Enter the access end time in 24hr HH:mm format (e.g. 13:30): ");
+							endTime = sc.nextLine();
+							sDate = LocalDate.parse(startDate, dateFormatter);
+							sTime = LocalTime.parse(startTime, timeFormatter);
+							eDate = LocalDate.parse(endDate, dateFormatter);
+							eTime = LocalTime.parse(endTime, timeFormatter);
+							if (sDate.compareTo(eDate) > 0) System.out.println("Start date cannot be before end date!");
+							else if (sDate.compareTo(eDate) == 0 && sTime.compareTo(eTime) > 0 ) System.out.println("Start time cannot be before end time!");
+						} while (sDate.compareTo(eDate) > 0 || (sDate.compareTo(eDate) == 0 && sTime.compareTo(eTime) > 0));
 						startDateTime = LocalDateTime.of(sDate, sTime);
 						endDateTime = LocalDateTime.of(eDate, eTime);
 						StaffController.editStudentAccessPeriod(matricNum, startDateTime, endDateTime);
@@ -100,26 +105,34 @@ class StaffUI{
 						String nationality = sc.nextLine();
 						System.out.print("Enter the student's year of study: ");
 						int yearOfStudy = Integer.parseInt(sc.nextLine());
-						System.out.print("Enter the student's access start date in yyyy-MM-dd format (e.g. 2020-01-30): ");
-						startDate = sc.nextLine();
-						System.out.print("Enter the student's access start time in 24hr HH:mm format (e.g. 13:30): ");
-						startTime = sc.nextLine();
-						System.out.print("Enter the student's access end date in yyyy-MM-dd format (e.g. 2020-01-30): ");
-						endDate = sc.nextLine();
-						System.out.print("Enter the student's access end time in 24hr HH:mm format (e.g. 13:30): ");
-						endTime = sc.nextLine();
-						sDate = LocalDate.parse(startDate, dateFormatter);
-						sTime = LocalTime.parse(startTime, timeFormatter);
-						eDate = LocalDate.parse(endDate, dateFormatter);
-						eTime = LocalTime.parse(endTime, timeFormatter);
+						do {
+							System.out.print("Enter the student's access start date in yyyy-MM-dd format (e.g. 2020-01-30): ");
+							startDate = sc.nextLine();
+							System.out.print("Enter the student's access start time in 24hr HH:mm format (e.g. 13:30): ");
+							startTime = sc.nextLine();
+							System.out.print("Enter the student's access end date in yyyy-MM-dd format (e.g. 2020-01-30): ");
+							endDate = sc.nextLine();
+							System.out.print("Enter the student's access end time in 24hr HH:mm format (e.g. 13:30): ");
+							endTime = sc.nextLine();
+							sDate = LocalDate.parse(startDate, dateFormatter);
+							sTime = LocalTime.parse(startTime, timeFormatter);
+							eDate = LocalDate.parse(endDate, dateFormatter);
+							eTime = LocalTime.parse(endTime, timeFormatter);
+							if (sDate.compareTo(eDate) > 0) System.out.println("Start date cannot be before end date!");
+							else if (sDate.compareTo(eDate) == 0 && sTime.compareTo(eTime) > 0 ) System.out.println("Start time cannot be before end time!");
+						} while (sDate.compareTo(eDate) > 0 || (sDate.compareTo(eDate) == 0 && sTime.compareTo(eTime) > 0));
+
 						startDateTime = LocalDateTime.of(sDate, sTime);
 						endDateTime = LocalDateTime.of(eDate, eTime);
 						StaffController.addStudent(username, password, name, matricNum, gender, nationality, yearOfStudy, startDateTime, endDateTime);
 						break;
 					} catch (NumberFormatException e1){
 						System.out.println("Please key in only integers for integer only fields!");
-						break;
-					} catch (Exception e){
+						break;}
+					catch(DateTimeParseException DateTimeParseException){
+						System.out.println("Please key in the appropriate format for datetime");
+					}
+					catch (Exception e){
 						System.out.println("Invalid date or time format!");
 						break;
 					}
@@ -523,12 +536,17 @@ class StaffUI{
 					StaffController.printAllCourses();
 					break;
 				case 10:
+					System.out.print("Enter the index number to be searched: ");
+					int indexToSearch = Integer.parseInt(sc.nextLine());
+					StaffController.printVacancies(indexToSearch);
+					break;
+				case 11:
                     System.out.println("Quitting program...");
                     break;
                 default:
                     System.out.println("Invalid input! Please select a valid choice.");
                     break;
             }
-        } while (choice != 10);
+        } while (choice != 11);
     }	
 }
