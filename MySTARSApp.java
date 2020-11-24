@@ -75,8 +75,10 @@ public class MySTARSApp {
 
             if(student.getStartAccessTime().isBefore(localDateTime) && student.getEndAccessTime().isAfter(localDateTime))
                 StudentUI.display(StudentManager.getStudent(username));
-            else
-                System.out.println("You are unable to access within this period of time");
+            else if(student.getStartAccessTime().isAfter(localDateTime))
+                System.out.println("You are unable to access within this time period. You can only access after " + student.getStartAccessTime());
+            else if (student.getEndAccessTime().isBefore(localDateTime))
+                System.out.println("You are unable to access within this time period. You can only access before " + student.getEndAccessTime());
         }
         else if (accountType == "Staff") {
             StaffUI.display();

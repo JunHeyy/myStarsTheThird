@@ -189,9 +189,9 @@ public class PopulateCourseNindex {
 		BU8401lesson3.add(BU8401lesson3a);		
 		
 		ArrayList <Index>BU8401Index = new ArrayList<Index>();
-		Index BU8401Index1a = new Index (00604, "BU8401", 10, 0, BU8401lesson1);
-		Index BU8401Index1b = new Index (00606, "BU8401", 10, 0, BU8401lesson2);
-		Index BU8401Index1c = new Index (00607, "BU8401", 10, 0, BU8401lesson3);
+		Index BU8401Index1a = new Index (100604, "BU8401", 10, 0, BU8401lesson1);
+		Index BU8401Index1b = new Index (100606, "BU8401", 10, 0, BU8401lesson2);
+		Index BU8401Index1c = new Index (100607, "BU8401", 10, 0, BU8401lesson3);
 		BU8401Index.add(BU8401Index1a);
 		BU8401Index.add(BU8401Index1b);
 		BU8401Index.add(BU8401Index1c);
