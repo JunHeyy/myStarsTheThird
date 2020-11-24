@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class CourseManager implements StarsManager{
 	
     private static ArrayList<Course> courseList;
-    private static final String filename = "src/data/Course.dat";
+    private static final String filename = "data/Course.dat";
     
     /**
 	 * Adds new Course into the database
