@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Scanner;
 import java.io.Console;
 
@@ -9,7 +12,9 @@ import java.io.Console;
  */
 public class MySTARSApp {
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchAlgorithmException {
-       // StaffUI.display();
+        //StaffUI.display();
+       // StudentUI.display(StudentManager.getStudent("YANG0570"));
+       // StudentUI.display(StudentManager.getStudent("CHAN0935"));
         boolean loginSuccess = false;
         Staff staffjj = new Staff("Staffjj", "passjj", 2);
         StaffManager.addStaff(staffjj);
@@ -19,6 +24,14 @@ public class MySTARSApp {
         int choice;
         Scanner sc = new Scanner(System.in);
         Console con = System.console();
+
+        Date date = new Date();
+        String currentDate= new SimpleDateFormat("yyyy-MM-dd").format(date);
+        String currentTime = new SimpleDateFormat("HH:mm").format(date);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+        String currenTime = dtf.format(now);
+
 
         String accountType = null;
         String username = null;
@@ -57,7 +70,13 @@ public class MySTARSApp {
         }
         
         if (accountType == "Student") {
-            StudentUI.display(StudentManager.getStudent(username));
+            Student student = StudentManager.getStudent(username);
+            LocalDateTime localDateTime = LocalDateTime.now();
+
+            if(student.getStartAccessTime().isBefore(localDateTime) && student.getEndAccessTime().isAfter(localDateTime))
+                StudentUI.display(StudentManager.getStudent(username));
+            else
+                System.out.println("You are unable to access within this period of time");
         }
         else if (accountType == "Staff") {
             StaffUI.display();

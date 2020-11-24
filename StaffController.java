@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.time.*;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -16,24 +17,28 @@ public class StaffController{
 	 */
 	public static void editStudentAccessPeriod(String matricNum, LocalDateTime start, LocalDateTime end) { //tested
 		try {
-	        ArrayList<Student> studentList = StudentManager.extractDB();
-	        for (Student s: studentList) { 
-        		if(s.getMatricNum().equals(matricNum)) {
-        			System.out.println("Found student");
-        			s.setStartAccessTime(start);
-        			s.setEndAccessTime(end);
-        			System.out.println("Student " + s.getName() + " can only access the portal from "+
-        						start + " to " + end);  
-        			StudentManager.updateStudentDB(studentList);
-        			break;
-        		
-        		}
-	        	
-	        }
+			ArrayList<Student> studentList = StudentManager.extractDB();
+			boolean sfound = false;
+			for (Student s: studentList) {
+				if(s.getMatricNum().equals(matricNum)) {
+					sfound = true;
+					System.out.println("Found student");
+					s.setStartAccessTime(start);
+					s.setEndAccessTime(end);
+					System.out.println("Student " + s.getName() + " can only access the portal from "+
+							start + " to " + end);
+					StudentManager.updateStudentDB(studentList);
+					break;
+
+				}
+			}
+			if (!sfound){
+				System.out.println("Student not found");
+			}
 		}
 		catch(Exception e) {
 			System.out.println("File not found");
-			
+
 		}
 	}
 
@@ -163,7 +168,8 @@ public class StaffController{
 	 *  Print the list of students that are registered to this Index.
 	 * @param indexNum Index number of the Index to be searched.
 	 */
-	public static void printStudentByIndex(int indexNum) { 
+	public static void printStudentByIndex(int indexNum) {
+		boolean found = false;
 		//Need to test!!
 		System.out.println("+--------------------------------------------------------------------------+");
 		System.out.println("| Name                                     | Gender | Nationality          |");
@@ -176,12 +182,14 @@ public class StaffController{
 	        	// if(registeredIndex == null) System.out.println("There are no students registered");
 	        	for (Index i: registeredIndex) {
 	        		if(i.getIndexNum().equals(indexNum)) {
+	        			found = true;
 						System.out.printf("| %-40s | %-6s | %-20s |\n", s.getName(), s.getGender(), s.getNationality());
 						break;
 	        		}
 				}
 			}
 			System.out.println("+--------------------------------------------------------------------------+");
+	        if(!found) System.out.println("Opps, Index cannot be found");
 		}
 		catch(Exception e) {
 			System.out.println("File not found");			
@@ -192,7 +200,8 @@ public class StaffController{
 	 *  Print the list of students that are enrolled in this Course.
 	 * @param courseCode Course code of the Course to be searched.
 	 */
-	public static void printStudentByCourse(String courseCode) { 
+	public static void printStudentByCourse(String courseCode) {
+		boolean found = false;
 		System.out.println("+--------------------------------------------------------------------------+");
 		System.out.println("| Name                                     | Gender | Nationality          |");
 		System.out.println("+--------------------------------------------------------------------------+");		
@@ -203,12 +212,14 @@ public class StaffController{
 	        	for(Index i : registeredIndex) {
 	        		// String indexcourseCode = IndexToCourseCode(i);
 	        		if(i.getCourseCode().equals(courseCode)) {
+	        			found = true;
 						System.out.printf("| %-40s | %-6s | %-20s |\n", s.getName(), s.getGender(), s.getNationality());
 						break;
 	        		}
 	        	}	        	
 			}
 			System.out.println("+--------------------------------------------------------------------------+");
+	        if(!found) System.out.println("Opps, Coursecode could not be found!!");
 		}
 		catch(Exception e) {
 			System.out.println("File not found");
@@ -256,6 +267,9 @@ public class StaffController{
 		Course selectedCourse = null;
 		Scanner sc = new Scanner(System.in);
 		String newCourseCode = null;
+		int selectedIndex =0;
+		int oldIndex;
+		int indexToChange;
 		ArrayList<Course> courseList = CourseManager.extractDB();
 		ArrayList<Student> studentList = StudentManager.extractDB();
 		for(Course c1: courseList){
@@ -266,160 +280,193 @@ public class StaffController{
 			}
 
 		}
-		int option =  CourseOptions();
-		// Switch statement
-		if(option == 1) {
-
-			System.out.println("Enter new Course code of this course ");
-			newCourseCode = sc.nextLine();
-			if(selectedCourse != null) selectedCourse.setCourseCode(newCourseCode);
-
-			for(Course c: courseList) {
-				if(c.getCourseCode().equals(selectedCourse.getCourseCode())) {
-					toDelete = c;
-					for(Index i2: c.getIndexList()){
-						i2.setCourseCode(newCourseCode);
-					}
-				}
-
-			}
-
-			courseList.remove(toDelete);
-			courseList.add(selectedCourse);
-			CourseManager.UpdateDB(courseList);
-			for (Student s: studentList) {
-				for (Index i : s.getRegisteredIndex()) {
-					if (i.getCourseCode().equals(courseCode)) {
-						i.setCourseCode(newCourseCode);
-						StudentManager.updateStudentDB(studentList);
-						break;
-					}
-				}
-				for (Index i2 : s.getWaitIndex()) {
-					if ( i2.getCourseCode().equals(courseCode)) {
-						i2.setCourseCode(newCourseCode);
-						StudentManager.updateStudentDB(studentList);
-						break;
-					}
-				}
-			}
-
-		}else if (option == 2) {
-			System.out.println("Which School would you like this course to be in?");
-			String newSchool = sc.nextLine();
-			selectedCourse.setSchool(newSchool);
-			for(Course c: courseList) {
-				if(c.getCourseCode().equals(selectedCourse.getCourseCode())) {
-					toDelete = c;
-
-				}
-			}
-			courseList.remove(toDelete);
-			courseList.add(selectedCourse);
-			CourseManager.UpdateDB(courseList);
-
-
-		}else if (option ==3) {
-			System.out.println("Which index number would you like to change the vacancies Input (1 -" + selectedCourse.getIndexList().size() +")");
-			int indexCounter = 1 ;
-			for(Index i : selectedCourse.getIndexList()){
-				System.out.print(indexCounter + ". " );
-				toString(i);
-				System.out.println();
-				indexCounter ++;
-			}
-			int selectedIndex = sc.nextInt();
-			int oldIndex = selectedCourse.getIndexList().get(selectedIndex-1).getIndexNum();
-			System.out.println("What index would you like to change to?");
-			int indexToChange = sc.nextInt();
-			for(Course c: courseList)
-			{ if(c.getCourseCode().equals(courseCode)){
-				System.out.println("Index changed");
-				c.getIndexList().get(selectedIndex-1).setIndexNum(indexToChange);
-				CourseManager.UpdateDB(courseList);
-			}}
-
-
-			for (Student s: studentList) {
-				for (Index i : s.getRegisteredIndex()) {
-					if (i.getIndexNum() == oldIndex) {
-						i.setIndexNum(indexToChange);
-						StudentManager.updateStudentDB(studentList);
-						break;
-					}
-				}
-				for (Index i2 : s.getWaitIndex()) {
-					if ( i2.getIndexNum() == oldIndex) {
-						i2.setIndexNum(indexToChange);
-						StudentManager.updateStudentDB(studentList);
-						break;
-					}
-				}
-			}
-
-
-
-
-
-
-		}else if (option==4){
-			System.out.println("Which index number would you like to change the vacancies Input (1 -" + selectedCourse.getIndexList().size() +")");
-			int indexCounter = 1 ;
-			for(Index i : selectedCourse.getIndexList()){
-				System.out.print(indexCounter + ". " );
-				toString(i);
-				System.out.println();
-				indexCounter ++;
-			}
-			int selectedIndex = sc.nextInt();
-			int oldIndex = selectedCourse.getIndexList().get(selectedIndex-1).getIndexNum();
-			System.out.println("What is the max vacancy you would like to change to?");
-			int maxStudent = sc.nextInt();
-			for(Course c: courseList)
-			{ if(c.getCourseCode().equals(courseCode)){
-				System.out.println("Vacancy changed");
-				int currentSlots;
-				int userIntendedSlots;
-				userIntendedSlots = maxStudent-c.getIndexList().get(selectedIndex-1).getNumStudents() ;
-				if(userIntendedSlots >0) {
-					c.getIndexList().get(selectedIndex-1).setMaxSize(maxStudent);
-					CourseManager.UpdateDB(courseList);
-				}
-				else System.out.println("Vacancy cannot be negative!");
-
-
-			}}
-
-
-			for (Student s: studentList) {
-				for (Index i : s.getRegisteredIndex()) {
-					if (i.getIndexNum() == oldIndex) {
-						i.setMaxSize(maxStudent);
-						StudentManager.updateStudentDB(studentList);
-						break;
-					}
-				}
-				for (Index i2 : s.getWaitIndex()) {
-					if ( i2.getIndexNum() == oldIndex) {
-						i2.setMaxSize(maxStudent);
-						StudentManager.updateStudentDB(studentList);
-						break;
-					}
-				}
-			}
-
-
-
-
+		if(selectedCourse == null){
+			System.out.println("The course you want to change cannot be found");
 		}
-	/*	for(Course c2: courseList){
-			if(selectedCourse .getCourseCode() == c2.getCourseCode()){
-				toDelete = c2;
+		else {
+			int option = CourseOptions();
+			// Switch statement
+			if (option == 1) {
+
+				System.out.println("Enter new Course code of this course ");
+				newCourseCode = sc.nextLine();
+				if (selectedCourse != null) selectedCourse.setCourseCode(newCourseCode);
+
+				for (Course c : courseList) {
+					if (c.getCourseCode().equals(selectedCourse.getCourseCode())) {
+						toDelete = c;
+						for (Index i2 : c.getIndexList()) {
+							i2.setCourseCode(newCourseCode);
+						}
+					}
+
+				}
+
+				courseList.remove(toDelete);
+				courseList.add(selectedCourse);
+				CourseManager.UpdateDB(courseList);
+				for (Student s : studentList) {
+					for (Index i : s.getRegisteredIndex()) {
+						if (i.getCourseCode().equals(courseCode)) {
+							i.setCourseCode(newCourseCode);
+							StudentManager.updateStudentDB(studentList);
+							break;
+						}
+					}
+					for (Index i2 : s.getWaitIndex()) {
+						if (i2.getCourseCode().equals(courseCode)) {
+							i2.setCourseCode(newCourseCode);
+							StudentManager.updateStudentDB(studentList);
+							break;
+						}
+					}
+				}
+
+			} else if (option == 2) {
+				System.out.println("Which School would you like this course to be in?");
+				String newSchool = sc.nextLine();
+				selectedCourse.setSchool(newSchool);
+				for (Course c : courseList) {
+					if (c.getCourseCode().equals(selectedCourse.getCourseCode())) {
+						toDelete = c;
+
+					}
+				}
+				courseList.remove(toDelete);
+				courseList.add(selectedCourse);
+				CourseManager.UpdateDB(courseList);
+
+
+			} else if (option == 3) {
+
+				int indexCounter = 1;
+				for (Index i : selectedCourse.getIndexList()) {
+					System.out.print(indexCounter + ". ");
+					toString(i);
+					System.out.println();
+					indexCounter++;
+				}
+				int optionSize = selectedCourse.getIndexList().size();
+				while (selectedIndex <1 || (selectedIndex > optionSize) ) {
+					try {
+						System.out.println("Which index number would you like to change the vacancies Input (1 -" + selectedCourse.getIndexList().size() + ")");
+						selectedIndex = Integer.parseInt(sc.nextLine());
+						if(selectedIndex<1 || selectedIndex>optionSize) System.out.println("Number of range! Input again!");
+
+					}catch(Exception NumberFormatException){
+
+						System.out.println("Please only select options: (1 -" + selectedCourse.getIndexList().size() + ")");
+
+
+					}
+
+				}
+				oldIndex = selectedCourse.getIndexList().get(selectedIndex - 1).getIndexNum();
+
+				while (true) {
+					try {
+						System.out.println("What index would you like to change to?");
+						indexToChange = Integer.parseInt(sc.nextLine());
+						break;
+					}catch (Exception NumberFormatException){
+						System.out.println("Please only input integers");
+					}
+
+				}
+				for (Course c : courseList) {
+					if (c.getCourseCode().equals(courseCode)) {
+						System.out.println("Index changed");
+						c.getIndexList().get(selectedIndex - 1).setIndexNum(indexToChange);
+						CourseManager.UpdateDB(courseList);
+					}
+				}
+
+
+				for (Student s : studentList) {
+					for (Index i : s.getRegisteredIndex()) {
+						if (i.getIndexNum() == oldIndex) {
+							i.setIndexNum(indexToChange);
+							StudentManager.updateStudentDB(studentList);
+							break;
+						}
+					}
+					for (Index i2 : s.getWaitIndex()) {
+						if (i2.getIndexNum() == oldIndex) {
+							i2.setIndexNum(indexToChange);
+							StudentManager.updateStudentDB(studentList);
+							break;
+						}
+					}
+				}
+
+
+			} else if (option == 4) {
+				System.out.println("Which index number would you like to change the vacancies Input (1 -" + selectedCourse.getIndexList().size() + ")");
+				int indexCounter = 1;
+				for (Index i : selectedCourse.getIndexList()) {
+					System.out.print(indexCounter + ". ");
+					toString(i);
+					System.out.println();
+					indexCounter++;
+				}
+				int optionSize = selectedCourse.getIndexList().size();
+				while (selectedIndex <1 || (selectedIndex > optionSize) ) {
+					try {
+						System.out.println("Which index number would you like to change the vacancies Input (1 -" + selectedCourse.getIndexList().size() + ")");
+						selectedIndex = Integer.parseInt(sc.nextLine());
+						if(selectedIndex<1 || selectedIndex>optionSize) System.out.println("Number of range! Input again!");
+
+					}catch(Exception NumberFormatException){
+						System.out.println("Please only select options: (1 -" + selectedCourse.getIndexList().size() + ")");
+					}
+
+				}
+
+				System.out.println("What is the max vacancy you would like to change to?");
+				int maxStudent = sc.nextInt();
+				oldIndex = selectedCourse.getIndexList().get(selectedIndex - 1).getIndexNum();
+
+
+				for (Course c : courseList) {
+					if (c.getCourseCode().equals(courseCode)) {
+						System.out.println("Vacancy changed");
+						int currentSlots;
+						int userIntendedSlots;
+						userIntendedSlots = maxStudent - c.getIndexList().get(selectedIndex - 1).getNumStudents();
+						if (userIntendedSlots > 0) {
+							c.getIndexList().get(selectedIndex - 1).setMaxSize(maxStudent);
+							CourseManager.UpdateDB(courseList);
+						} else System.out.println("Vacancy cannot be negative!");
+
+
+					}
+				}
+
+
+				for (Student s : studentList) {
+					for (Index i : s.getRegisteredIndex()) {
+						if (i.getIndexNum() == oldIndex) {
+							i.setMaxSize(maxStudent);
+							StudentManager.updateStudentDB(studentList);
+							break;
+						}
+					}
+					for (Index i2 : s.getWaitIndex()) {
+						if (i2.getIndexNum() == oldIndex) {
+							i2.setMaxSize(maxStudent);
+							StudentManager.updateStudentDB(studentList);
+							break;
+						}
+					}
+				}
+
+
 			}
-		}*/
-		courseList.remove(selectedCourse);
-		courseList.add(selectedCourse );
-		CourseManager.UpdateDB(courseList);
+
+			courseList.remove(selectedCourse);
+			courseList.add(selectedCourse);
+			CourseManager.UpdateDB(courseList);
+		}
 
 	}
 	public static int CourseOptions(){
@@ -520,22 +567,30 @@ public class StaffController{
 	public static void printVacancies(int indexNum) throws ClassNotFoundException, IOException {
 		String courseCode = null;
 		String courseName = null;
+		Boolean cfound = false;
 		ArrayList<Course> courseList = CourseManager.extractDB();
 		for (Course c: courseList) {
 			for (Index i: c.getIndexList()) {
 				if (i.getIndexNum() == indexNum) {
+					cfound = true;
 					courseCode = i.getCourseCode();
 					courseName = c.getCourseName();
 				}
 			}
 		}
-		int vacancies = checkVacanciesForIndex(indexNum);
+		if (cfound == false){
+			System.out.println("Index number not found!");
 
-		System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
-		System.out.println("| Course Code | Course Name                                   | Index Number | Vacancies |");
-		System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
-		System.out.printf( "| %-11s | %-45s | %-12s | %-9d |\n", courseCode, courseName, indexNum, vacancies);
-		System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
+		} else {
+			int vacancies = checkVacanciesForIndex(indexNum);
+
+			System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
+			System.out.println("| Course Code | Course Name                                   | Index Number | Vacancies |");
+			System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
+			System.out.printf( "| %-11s | %-45s | %-12s | %-9d |\n", courseCode, courseName, indexNum, vacancies);
+			System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
+		}
+
 	}
 
 	public static void toString(Index index) {

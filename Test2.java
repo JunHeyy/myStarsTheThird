@@ -10,9 +10,11 @@ public class Test2 {
 		//ArrayList<Integer> s1Index = new ArrayList<Integer>();
 		Student s1 = new Student("YANG0570", "password", "XingHao", "U1912345A", 'M', "SG", 2, LocalDateTime.of(2020,11,20,10,0), LocalDateTime.of(2020,11,27,22,0));
 		Student s2 = new Student("CHAN0935", "password", "Joel", "U1923456Z", 'M', "SG", 2, LocalDateTime.of(2020,11,20,10,0), LocalDateTime.of(2020,11,27,22,0));
+		Student s3 = new Student("JTOH050", "password", "Jun Jie", "U1922277E", 'M', "SG", 2, LocalDateTime.of(2020,11,24,23,0), LocalDateTime.of(2020,11,27,2,0));
 
 		StudentManager.addStudent(s1);
 		StudentManager.addStudent(s2);
+		StudentManager.addStudent(s3);
 		
 		//Staff admin = new Staff("admin", "password", 1);
 		//StaffManager.addStaff(admin);

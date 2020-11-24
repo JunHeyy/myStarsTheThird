@@ -34,11 +34,23 @@ public class StudentController {
 				courseToAdd = c;
 			} 
 		}
-		for (Index i: courseToAdd.getIndexList()) {
+		if(courseToAdd ==null){
+			System.out.println("The Course that you want does not exist");
+			return s;
+		}
+
+
+		for (Index i : courseToAdd.getIndexList()) {
 			if (i.getIndexNum().equals(newIndex)) {
-				indexToAdd =  i;
+				indexToAdd = i;
 			}
 		}
+		if(courseToAdd  == null || indexToAdd == null){
+			System.out.println("The Course/Index that you want to add does not exist");
+			return s;
+		}
+
+
 		boolean toRegister = true;
 		if (s.getRegisteredIndex().contains(indexToAdd)) {
 			System.out.println("Course is already registered.");	
@@ -274,10 +286,19 @@ public class StudentController {
 				courseToAdd = c;
 			} 
 		}
+		if(courseToAdd == null){
+			System.out.println("Course does not exist!");
+			return s;
+		}
+
 		for (Index i: courseToAdd.getIndexList()) {
 			if (i.getIndexNum().equals(newIndex)) {
 				indexToAdd =  i;
 			}
+		}
+		if(indexToAdd == null){
+			System.out.println("Index does not exist!");
+			return s;
 		}
 		boolean toRegister = true;
 		if (checkVacanciesForIndex(newIndex) > 0) {
@@ -293,10 +314,12 @@ public class StudentController {
 					toRegister = true;
 					break;
 				}
-				System.out.println("Course " + courseCode + " not registered under a different index.");
+				System.out.println("Error!");
+				System.out.println("Course " + courseCode + " registered under a different index or course is in the wait list.");
 				toRegister = false;
 				return s;
 			}
+			if(toDelete ==null ) System.out.println("You cannot change Courses that you are not registered for!");
 			for (Index i: s.getRegisteredIndex()) {	
 				if (!i.equals(toDelete)) {
 					for (Lesson l: i.getLessons()) {
@@ -405,7 +428,7 @@ public class StudentController {
 							}
 						}
 						if (!swapped) {
-							System.out.println("Different courses!");
+							System.out.println("You have attempted to swap different courses or swap courses in the waiting list!");
 							return currUser;	
 						}
 					}
@@ -470,12 +493,14 @@ public class StudentController {
 			}
 		}
 		int vacancies = checkVacanciesForIndex(indexNum);
-
-		System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
-		System.out.println("| Course Code | Course Name                                   | Index Number | Vacancies |");
-		System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
-		System.out.printf( "| %-11s | %-45s | %-12s |  %d/%-6d |\n", courseCode, courseName, indexNum, vacancies, indexToPrint.getMaxSize());
-		System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
+		if(indexToPrint == null) System.out.println("Index does not exist!");
+		else {
+			System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
+			System.out.println("| Course Code | Course Name                                   | Index Number | Vacancies |");
+			System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
+			System.out.printf("| %-11s | %-45s | %-12s |  %d/%-6d |\n", courseCode, courseName, indexNum, vacancies, indexToPrint.getMaxSize());
+			System.out.println("+-------------+-----------------------------------------------+--------------+-----------+");
+		}
 	}
 
 	/**
