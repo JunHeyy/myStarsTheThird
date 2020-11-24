@@ -104,27 +104,7 @@ public class StaffController{
 		printSingleCourse(newCourse.getCourseCode());
 	}
 	
-	/**
-	 * Update an existing course. If certain attribute is unchanged, the current value is passed in as the new value.
-	 * @param oldCode 		Course's ld course code.
-	 * @param newCode 		Course's new course code.
-	 * @param newCourseName Course's new name.
-	 * @param newAUS 		Course's new number of AUs.
-	 * @param newIndexlist 	Course's new ArrayList of Indexes.
-	 */
-	public static void updateCourse(String oldCode, String newCode, String newCourseName, int newAUS, ArrayList<Index> newIndexlist) throws IOException {
-		//TODO
-		ArrayList<Course> courseList = CourseManager.extractDB();
-		for(Course c : courseList){
-			if(c.getCourseCode().equals(oldCode)) {
-				c.setCourseCode(newCode);
-				c.setNumAUs(newAUS);
-				c.setIndexList(newIndexlist);
-				c.setCourseName(newCourseName);
-				CourseManager.UpdateDB(courseList);
-			}
-		}
-	}
+
 
 	/**
 	 * Add new Index to a Course.
