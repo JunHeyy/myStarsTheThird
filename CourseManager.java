@@ -87,7 +87,7 @@ public class CourseManager implements StarsManager{
    /**
 	 * Adds a slot to an Index when a Student drops it
 	 * @param oldIndex 					The index number of the Index belonging to the Course that a Student has dropped.
-	 * @param CourseCode  				The course code of the Course that a student has dropped.
+	 * @param courseCode  				The course code of the Course that a student has dropped.
 	 * @throws IOException 				if file does not exist.
 	 * @throws ClassNotFoundException 	if mentioned classes are not found in the classpath.
 	 */

@@ -22,7 +22,7 @@ public class Test2 {
 		Student s12 = new Student("YPKG18", "password", "Khee", "U1000660C", 'M', "SG", 2, LocalDateTime.of(2020,11,24,23,0), LocalDateTime.of(2020,12,27,2,0));
 		Student s13 = new Student("CHONG18", "password", "Chong Xiang", "U1011660C", 'M', "SG", 2, LocalDateTime.of(2020,11,24,23,0), LocalDateTime.of(2020,12,27,2,0));
 		Student s14 = new Student("LOH18", "password", "Donald Loh", "U1022660C", 'M', "SG", 2, LocalDateTime.of(2020,11,24,23,0), LocalDateTime.of(2020,12,27,2,0));
-		Student s15 = new Student("FKHONG003", "password", "Nicholas", "U1912345A", 'M', "SG", 2, LocalDateTime.of(2020,11,20,10,0), LocalDateTime.of(2020,12,27,22,0));
+		Student s15 = new Student("FKHONG003", "password", "Nicholas", "U1932445A", 'M', "SG", 2, LocalDateTime.of(2020,11,20,10,0), LocalDateTime.of(2020,12,27,22,0));
 		StudentManager.addStudent(s1);
 		StudentManager.addStudent(s2);
 		StudentManager.addStudent(s3);
