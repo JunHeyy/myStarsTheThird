@@ -65,7 +65,7 @@ public class CourseManager implements StarsManager{
 	
     /**
 	 * Removes a slot from an Index when a Student registers for it
-	 * @param new``Index 					The index number of the Index belonging to the Course that a Student has registered for.
+	 * @param newIndex 					The index number of the Index belonging to the Course that a Student has registered for.
 	 * @param CourseCode  				The course code of the Course that a student has registered for.
 	 * @throws IOException				if file does not exist.
 	 * @throws ClassNotFoundException 	if mentioned classes are not found in the classpath.

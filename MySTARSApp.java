@@ -88,10 +88,15 @@ public class MySTARSApp {
                     StudentUI.display(StudentManager.getStudent(username));
                     loginSuccess = false;
                 }
-                else if (student.getStartAccessTime().isAfter(localDateTime))
+                else if (student.getStartAccessTime().isAfter(localDateTime)) {
                     System.out.println("You are unable to access within this time period. You can only access after " + student.getStartAccessTime());
-                else if (student.getEndAccessTime().isBefore(localDateTime))
+                    loginSuccess = false;
+                }
+                else if (student.getEndAccessTime().isBefore(localDateTime)) {
+
+                    loginSuccess = false;
                     System.out.println("You are unable to access within this time period. Your access time has expired. Please look for your school admin. " + student.getEndAccessTime());
+                }
             } else if (accountType == "Staff") {
                 StaffUI.display();
 

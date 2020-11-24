@@ -160,6 +160,19 @@ class StaffUI{
 							System.out.println("(2) Lecture and Tutorial ");
 							System.out.println("(3) Lecture, Tutorial and Lab ");
 							int format = Integer.parseInt(sc.nextLine());
+							while(format <1 ||  format > 3){
+								try{
+									System.out.println("Please enter only (1-3)!");
+									System.out.println("Select the course format: ");
+									System.out.println("(1) Lecture only ");
+									System.out.println("(2) Lecture and Tutorial ");
+									System.out.println("(3) Lecture, Tutorial and Lab ");
+									format = Integer.parseInt(sc.nextLine());
+
+								}catch(Exception e){
+									System.out.println("Please enter only integers");
+								}
+							}
 							ArrayList<Lesson> lessonList = new ArrayList<Lesson>();
 
 							if (format >= 1) {
@@ -189,6 +202,19 @@ class StaffUI{
 										System.out.println("(2) Even weeks");
 										System.out.println("(3) All weeks");
 										chooseWeek = Integer.parseInt(sc.nextLine());
+										while(chooseWeek <1 ||  chooseWeek > 3){
+											try{
+												System.out.println("Please enter only (1-3)!");
+												System.out.println("Select the course format: ");
+												System.out.println("(1) Lecture only ");
+												System.out.println("(2) Lecture and Tutorial ");
+												System.out.println("(3) Lecture, Tutorial and Lab ");
+												chooseWeek = Integer.parseInt(sc.nextLine());
+
+											}catch(Exception e){
+												System.out.println("Please enter only integers");
+											}
+										}
 										switch (chooseWeek) {
 											case 1:
 												lecWeek = "o";

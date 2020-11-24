@@ -78,6 +78,12 @@ public class StaffController{
 		Student student = new Student(username, password, name, matricNum, gender, nationality, 
 										yearOfStudy, startAccessTime, endAccessTime);
 		try {
+			System.out.println("Succesfully added student!");
+			System.out.println("These are the students currently in the database");
+			ArrayList<Student> studentList = StudentManager.extractDB();
+			for(Student s :studentList){
+				System.out.println("Student Name: " + s.getName() + " Student Matrics Nmuber: " + s.getMatricNum());
+			}
 			StudentManager.addStudent(student);
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
