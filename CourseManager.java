@@ -32,6 +32,7 @@ public class CourseManager implements StarsManager{
 			for(Course c : courseList){
 				System.out.println("Coursename: "  + c.getCourseName() + " CourseCode: " + c.getCourseCode());
 			}
+			System.out.println("Success you have just registered");
 	        IOController.writeFile(filename, courseList);
         }
     }
