@@ -69,11 +69,11 @@ public class MySTARSApp {
                 } while (choice != 1 && choice != 2);
                 System.out.print("Enter your username: ");
                 username = sc.nextLine();
-                //char [] readin;
-               // readin = con.readPassword("Enter your password: ");
-               // password = String.valueOf(readin);
-                System.out.println("Enter your password: ");
-                password = sc.nextLine();
+                char [] readin;
+                readin = con.readPassword("Enter your password: ");
+                password = String.valueOf(readin);
+                //System.out.println("Enter your password: ");
+               // password = sc.nextLine();
 
                 loginSuccess = LoginController.validate(accountType, username, password);
 
@@ -94,8 +94,8 @@ public class MySTARSApp {
                     System.out.println("You are unable to access within this time period. Your access time has expired. Please look for your school admin. " + student.getEndAccessTime());
             } else if (accountType == "Staff") {
                 StaffUI.display();
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
+
+
                 loginSuccess = false;
             }
         }

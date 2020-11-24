@@ -135,7 +135,7 @@ class StaffUI{
 					catch (Exception e){
 						System.out.println("Invalid date or time format!");
 						break;
-					}
+					}finally{break;}
 				case 3:
 					try {
 						System.out.print("Enter the course code: ");

@@ -171,6 +171,26 @@ public class StaffController{
 	public static void printStudentByIndex(int indexNum) {
 		boolean found = false;
 		//Need to test!!
+		boolean exists = false;
+		try {
+			ArrayList<Course> courseList = CourseManager.extractDB();
+			for (Course c: courseList) {
+				for (Index i: c.getIndexList()) {
+					if (i.getIndexNum() == indexNum) {
+						exists = true;
+						break;
+					}
+				}
+			}
+			if (!exists) {
+				System.out.println("Course does not exist.");
+				return;
+			}
+		}
+		catch (Exception e) {
+			System.out.println("File not found");
+			return;
+		}
 		System.out.println("+--------------------------------------------------------------------------+");
 		System.out.println("| Name                                     | Gender | Nationality          |");
 		System.out.println("+--------------------------------------------------------------------------+");		
@@ -202,6 +222,24 @@ public class StaffController{
 	 */
 	public static void printStudentByCourse(String courseCode) {
 		boolean found = false;
+		boolean exists = false;
+		try {
+			ArrayList<Course> courseList = CourseManager.extractDB();
+			for (Course c: courseList) {
+				if (c.getCourseCode().equals(courseCode)) {
+					exists = true;
+					break;
+				}
+			}
+			if (!exists) {
+				System.out.println("Course does not exist.");
+				return;
+			}
+		}
+		catch (Exception e) {
+			System.out.println("File not found");
+			return;
+		}
 		System.out.println("+--------------------------------------------------------------------------+");
 		System.out.println("| Name                                     | Gender | Nationality          |");
 		System.out.println("+--------------------------------------------------------------------------+");		

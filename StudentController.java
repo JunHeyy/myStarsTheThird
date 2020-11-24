@@ -2,13 +2,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.ConcurrentModificationException;  
+import java.util.ConcurrentModificationException;
 
 /**
  * Control class to handle all student related function.
  */
 public class StudentController {
-	
+
 	Student student;
 	String courseCode;
 	int indexNum;
@@ -32,7 +32,7 @@ public class StudentController {
 		for (Course c: courseList) {
 			if (c.getCourseCode().equals(courseCode)) {
 				courseToAdd = c;
-			} 
+			}
 		}
 		if(courseToAdd ==null){
 			System.out.println("The Course that you want does not exist");
@@ -53,7 +53,7 @@ public class StudentController {
 
 		boolean toRegister = true;
 		if (s.getRegisteredIndex().contains(indexToAdd)) {
-			System.out.println("Course is already registered.");	
+			System.out.println("Course is already registered.");
 			toRegister = false;
 		}
 		else {
@@ -94,33 +94,45 @@ public class StudentController {
 				CourseManager.slotTaken(indexToAdd.getIndexNum(), indexToAdd.getCourseCode());
 			}
 			else {
+
 				studentList = StudentManager.extractDB();
 				Student waitStudent = null;
+				boolean exist = false;
 				for (Student s3: studentList) {
 					if (s3.equals(s)) {
-						System.out.println("You will be added to wait list since there are no vacancies");
-						ArrayList<Index> waitIndex = s3.getWaitIndex();
-						waitIndex.add(indexToAdd);
-						s3.setWaitIndex(waitIndex);
-						waitStudent = s3;
-						StudentManager.updateStudentDB(studentList);
-						break;
+
+						for (Index i : s3.getWaitIndex()) {
+							if (i.getIndexNum() == newIndex) {
+								exist = true;
+								System.out.println("You are already in the wait list!");
+							}
+						}
+						if (!exist) {
+							System.out.println("You will be added to wait list since there are no vacancies");
+							ArrayList<Index> waitIndex = s3.getWaitIndex();
+							waitIndex.add(indexToAdd);
+							s3.setWaitIndex(waitIndex);
+							waitStudent = s3;
+							StudentManager.updateStudentDB(studentList);
+							break;
+						}
 					}
 				}
 
 				// ArrayList<Index> waitIndex = waitStudent.getWaitIndex();
 				// waitIndex.add(indexToAdd);
-
-				courseList = CourseManager.extractDB();
-				outer:
-				for (Course c: courseList) {
-					for (Index i3: c.getIndexList()) {
-						if (i3.getIndexNum() == newIndex) {
-							LinkedList<Student> indexWaitlist = i3.getWaitlist();
-							indexWaitlist.add(waitStudent);
-							// i3.setWaitlist(indexWaitlist);
-							CourseManager.UpdateDB(courseList);
-							break outer;
+				if (!exist){
+					courseList = CourseManager.extractDB();
+					outer:
+					for (Course c: courseList) {
+						for (Index i3: c.getIndexList()) {
+							if (i3.getIndexNum() == newIndex) {
+								LinkedList<Student> indexWaitlist = i3.getWaitlist();
+								indexWaitlist.add(waitStudent);
+								// i3.setWaitlist(indexWaitlist);
+								CourseManager.UpdateDB(courseList);
+								break outer;
+							}
 						}
 					}
 				}
@@ -130,7 +142,7 @@ public class StudentController {
 		printCourseRegistered(s2);
 		return s2;
 	}
-	
+
 	/**
 	 * Drop a course registered by the student - Call the function by passing in String matric number and String course code
 	 * @param s									Student to remove Course from.
@@ -140,9 +152,9 @@ public class StudentController {
 	 * @throws ConcurrentModificationException	if multiple values of an ArrayList are being modified concurrently.
 	 */
 	public static Student removeCourse(Student s, String courseCode) throws ClassNotFoundException, IOException, ConcurrentModificationException {
-		
+
 		ArrayList<Student> studentList = StudentManager.extractDB();
-		
+
 		boolean removed = false;
 		Index toDelete = null;
 
@@ -215,7 +227,7 @@ public class StudentController {
 								StudentManager.updateStudentDB(studentList);
 								CourseManager.slotTaken(i.getIndexNum(), i.getCourseCode());
 								MailManager.sendFromGMail("ntuchinesetiger@gmail.com","@Testing123",s4.getUsername()+"@e.ntu.edu.sg","Congratulations!",
-									"Off waitlist. Now registered for " + i.getCourseCode());
+										"Off waitlist. Now registered for " + i.getCourseCode());
 								break;
 							}
 						}
@@ -232,14 +244,14 @@ public class StudentController {
 		printCourseRegistered(s2);
 		return s2;
 	}
-	
+
 	/**
 	 * Print all the course that is registered by the student - Call the function by passing in String Matrics number
 	 * @param s 						Student whose Course list is to be printed.
 	 * @throws ClassNotFoundException	if mentioned classes are not found in the classpath.
 	 * @throws IOException				if file cannot be read in.
 	 */
-	public static void printCourseRegistered(Student s) throws ClassNotFoundException, IOException { 
+	public static void printCourseRegistered(Student s) throws ClassNotFoundException, IOException {
 		ArrayList<Course> courseList = CourseManager.extractDB();
 		System.out.println("+-------------+-----------------------------------------------+-----+--------------+-------------+");
 		System.out.println("| Course Code | Course Name                                   | AUs | Index Number | Status      |");
@@ -261,7 +273,7 @@ public class StudentController {
 		System.out.println("+-------------+-----------------------------------------------+-----+--------------+-------------+");
 
 	}
-		
+
 	/**
 	 * Change an existing index with another index. Old and new Index must belong to the same Course to be swapped.
 	 * @param s 								Student who is swapping Indexes.
@@ -284,7 +296,7 @@ public class StudentController {
 		for (Course c: courseList) {
 			if (c.getCourseCode().equals(courseCode)) {
 				courseToAdd = c;
-			} 
+			}
 		}
 		if(courseToAdd == null){
 			System.out.println("Course does not exist!");
@@ -305,7 +317,7 @@ public class StudentController {
 			ArrayList<Timeslot> toCheck = new ArrayList<Timeslot>();
 			for (Index i: s.getRegisteredIndex()) {
 				if (i.getIndexNum() == indexToAdd.getIndexNum()) {
-					System.out.println("Index is already registered.");	
+					System.out.println("Index is already registered.");
 					toRegister = false;
 					return s;
 				}
@@ -320,7 +332,7 @@ public class StudentController {
 				return s;
 			}
 			if(toDelete ==null ) System.out.println("You cannot change Courses that you are not registered for!");
-			for (Index i: s.getRegisteredIndex()) {	
+			for (Index i: s.getRegisteredIndex()) {
 				if (!i.equals(toDelete)) {
 					for (Lesson l: i.getLessons()) {
 						for (Timeslot t: l.getTimeslots()) {
@@ -343,7 +355,7 @@ public class StudentController {
 					}
 				}
 			}
-			
+
 			if (toRegister) {
 				ArrayList<Index> registeredIndex = s.getRegisteredIndex();
 				for(Index i : registeredIndex) {
@@ -354,8 +366,8 @@ public class StudentController {
 						removed = true;
 					}
 				}
-				
-				if (!removed) return s;	
+
+				if (!removed) return s;
 
 				if (toDelete != null) {
 					// System.out.println("Remove from student");
@@ -383,9 +395,9 @@ public class StudentController {
 		}
 		Student s2 = StudentManager.getStudent(s.getUsername());
 		printCourseRegistered(s2);
-		return s2;		
+		return s2;
 	}
-    
+
 	/**
 	 * swap an index with another student - Call the function by passing in String own matric number, Int own index, Int peer index, String peer matric number and String peer password
 	 * @param s 						Student initiating the swap.
@@ -409,12 +421,12 @@ public class StudentController {
 				if(s2.equals(s) && p.getMatricNum().equals(peerMatricNum)) {
 					if (p.getPassword().equals(Hashing.hashPassword(peerPw))) {
 						ArrayList<Index> indexList1 = s2.getRegisteredIndex();
-						ArrayList<Index> indexList2 = p.getRegisteredIndex();	
+						ArrayList<Index> indexList2 = p.getRegisteredIndex();
 						boolean swapped = false;
 						out:
 						for (Index own: s2.getRegisteredIndex()) {
 							for (Index peer: p.getRegisteredIndex()) {
-								if (own.getIndexNum().equals(ownIndex) && peer.getIndexNum().equals(peerIndex) && own.getCourseCode().equals(peer.getCourseCode())) {									
+								if (own.getIndexNum().equals(ownIndex) && peer.getIndexNum().equals(peerIndex) && own.getCourseCode().equals(peer.getCourseCode())) {
 									indexList1.remove(own);
 									indexList2.remove(peer);
 									indexList1.add(peer);
@@ -429,7 +441,7 @@ public class StudentController {
 						}
 						if (!swapped) {
 							System.out.println("You have attempted to swap different courses or swap courses in the waiting list!");
-							return currUser;	
+							return currUser;
 						}
 					}
 					else {
@@ -437,8 +449,8 @@ public class StudentController {
 						return currUser;
 					}
 				}
-			}		
-		}	
+			}
+		}
 		studentList = StudentManager.extractDB();
 		for (Student s2: studentList) {
 			if (s2.equals(s)) {
@@ -448,7 +460,7 @@ public class StudentController {
 		printCourseRegistered(currUser);
 		return currUser;
 	}
-	
+
 	/**
 	 * Check for the number of vacancies in an Index.
 	 * @param indexNum Index to be checked.
@@ -457,16 +469,16 @@ public class StudentController {
 	 * @throws IOException				if file cannot be read in.
 	 */
 	public static int checkVacanciesForIndex(int indexNum) throws ClassNotFoundException, IOException {
-        ArrayList<Course> courseList = CourseManager.extractDB();
-        for (Course c: courseList) {
-        	ArrayList<Index> indexList = c.getIndexList();
-            for(Index i: indexList) {
-                if(i.getIndexNum() == indexNum) {
-                    int vacancies = i.getMaxSize() - i.getNumStudents();
+		ArrayList<Course> courseList = CourseManager.extractDB();
+		for (Course c: courseList) {
+			ArrayList<Index> indexList = c.getIndexList();
+			for(Index i: indexList) {
+				if(i.getIndexNum() == indexNum) {
+					int vacancies = i.getMaxSize() - i.getNumStudents();
 
-                    return vacancies;
-                }
-            }
+					return vacancies;
+				}
+			}
 		}
 		return 0;
 	}
@@ -513,7 +525,7 @@ public class StudentController {
 	public static boolean hasVacancies(int indexNum) throws ClassNotFoundException, IOException {
 		return checkVacanciesForIndex(indexNum) > 0 ? true : false;
 	}
-	
+
 	// public static boolean checkCourseRegistered(String matricNum, String courseCode) throws ClassNotFoundException, IOException {
 	// 	ArrayList <Student> studentList = StudentManager.extractDB();
 	// 	for(Student s : studentList){
@@ -527,7 +539,7 @@ public class StudentController {
 	// 		}
 	// 	} return true;
 	// }
-	
+
 	// public void checkVacancies(int indexNum) throws ClassNotFoundException, IOException {
 	// 	ArrayList<Course> courseList = CourseManager.extractDB();
 	// 	for (Course c : courseList) {
@@ -541,9 +553,9 @@ public class StudentController {
 	// 		}
 	// 	}
 	// }
-	
+
 	// private static String IndexToCourseCode(int IndexNum) {
-		
+
 	// 	ArrayList<Course> courseList = CourseManager.extractDB();
 	// 	for(Course c: courseList) {
 	// 		for(Index i : c.getIndexList()) {
