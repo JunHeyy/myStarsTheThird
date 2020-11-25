@@ -7,7 +7,7 @@ import javax.mail.internet.AddressException;
 /**
  * Controller class that handles all functions related to sending norifications.
  */
-public class MailManager {
+public class MailManager implements Notification {
     //private static String USER_NAME = "kenja1523";  // GMail user name (just the part before "@gmail.com")
     //private static String PASSWORD = "aa11bb22cc33"; // GMail password
     //private static String RECIPIENT = "junjiexavier37@gmail.com";
@@ -29,7 +29,11 @@ public class MailManager {
      * @param subject   Subject of email.
      * @param body      Email content body.
      */
-    public static void sendFromGMail(String from, String pass, String to, String subject, String body) {
+    public static void send (String to, String courseCode) {
+        String from = "ntuchinesetiger@gmail.com";
+        String pass = "@Testing123";
+        String subject = "MySTARS Notification";
+        String body = "Congratulations! You are off the waitlist and have been registered for course " + courseCode + ".";
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
         props.put("mail.smtp.starttls.enable", "true");
