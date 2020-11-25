@@ -8,6 +8,8 @@ import java.time.LocalTime;
 public class PopulateCourseNindex {
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
 
+
+		//File to populate course database, not part of project
 		ArrayList<Timeslot> Lecture2002 = new ArrayList<Timeslot>();
 		Lecture2002.add(new Timeslot(2, LocalTime.of(9,30), LocalTime.of(10,30), "a"));
 		Lecture2002.add(new Timeslot(5, LocalTime.of(11,30), LocalTime.of(12,30), "a"));

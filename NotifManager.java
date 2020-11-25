@@ -1,3 +1,6 @@
+/**
+ * Controller class to send email to students
+ */
 public class NotifManager {
     /**
      * Sends email notification to Students.
