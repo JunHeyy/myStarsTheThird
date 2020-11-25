@@ -23,11 +23,8 @@ public class MailManager implements Notification {
 
     /**
      * Sends email notification to Students.
-     * @param from      Sender's email address (should be admin's email account).
-     * @param pass      Sender's password for the email account.
-     * @param to        Recipient's email address (should be Student's email).
-     * @param subject   Subject of email.
-     * @param body      Email content body.
+     * @param to            Recipient's email address (should be Student's email).
+     * @param courseCode    Course code of Course to be registered to Student
      */
     public static void send (String to, String courseCode) {
         String from = "ntuchinesetiger@gmail.com";
